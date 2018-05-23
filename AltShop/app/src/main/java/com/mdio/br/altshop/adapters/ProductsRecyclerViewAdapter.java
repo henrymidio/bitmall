@@ -13,7 +13,7 @@ import com.mdio.br.altshop.models.Product;
 
 import java.util.List;
 
-public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRecyclerViewAdapter.ViewHolder> {
+public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
 
     private List<Product> itemList;
 
@@ -22,7 +22,7 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRe
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProductsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item_lis, parent, false);
         ViewHolder vh = new ViewHolder(layoutView);
         return vh;
@@ -38,6 +38,11 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRe
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

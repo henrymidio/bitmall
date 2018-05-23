@@ -48,6 +48,7 @@ public class ProductsFragment extends Fragment {
         List<Product> gaggeredList = getProducts();
 
         ProductsRecyclerViewAdapter rcAdapter = new ProductsRecyclerViewAdapter(gaggeredList);
+        rcAdapter.
         recyclerView.setAdapter(rcAdapter);
     }
 
