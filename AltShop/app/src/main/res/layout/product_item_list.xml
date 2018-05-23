@@ -18,10 +18,11 @@
             android:layout_width="220dp"
             android:layout_height="150dp"
             android:contentDescription="Descrição"
+            android:transitionName="profile"
             android:scaleType="centerCrop" />
 
         <TextView
-            android:id="@+id/product_name"
+            android:id="@+id/productPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/product_photo"
@@ -37,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/product_name"
+            android:layout_below="@+id/productPrice"
             android:layout_marginStart="8dp"
             android:paddingBottom="10dp"
             android:text="TextView"

@@ -7,25 +7,25 @@
     android:background="@android:color/white"
     tools:context=".activities.Main.ProductDetailFragment">
 
-
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/productImage"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/relogio" />
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tenis2" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/productName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="15dp"
         android:textStyle="bold"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textColor="#666"
-        android:text="Smartphone Mirage" />
+        android:text="TÊNIS RESERVA RSV #166 LIBERTY" />
 
     <TextView
         android:id="@+id/textView2"
@@ -33,18 +33,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="15dp"
-        android:textSize="22dp"
-        android:textColor="#22b14c"
-        android:text="R$ 2.011,12" />
+        android:textSize="40dp"
+        android:textColor="@color/colorAccent"
+        android:text="R$ 499,00" />
 
     <TextView
         android:id="@+id/textView3"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
         android:textColor="#666"
-        android:text='Smartphone Mirage 61S Dual Chip Android Lollipop Tela 5" 8GB Wi-Fi 3G Câmera 8MP' />
+        android:text='Tênis exclusivo da Linha Reserva pra Calçar, agora por menos! Mete o pé no seu! 100% COURO' />
 
     <Button
         android:id="@+id/button"
@@ -58,9 +60,10 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:textAlignment="center"
         android:textColor="#007bff"
         android:textStyle="bold"
-        android:text="Magazine Luiza" />
+        android:text="Reserva" />
 
 </LinearLayout>

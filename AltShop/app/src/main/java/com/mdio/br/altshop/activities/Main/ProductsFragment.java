@@ -2,7 +2,6 @@ package com.mdio.br.altshop.activities.Main;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.mdio.br.altshop.R;
 import com.mdio.br.altshop.adapters.ProductsRecyclerViewAdapter;
+import com.mdio.br.altshop.interfaces.OnFragmentCallListener;
 import com.mdio.br.altshop.models.Product;
 
 import java.util.ArrayList;
@@ -21,6 +21,8 @@ import java.util.List;
 public class ProductsFragment extends Fragment {
 
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
+
+    OnFragmentCallListener mCallback;
 
     public ProductsFragment() {
         // Required empty public constructor
@@ -38,6 +40,20 @@ public class ProductsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnFragmentCallListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
     private void loadProducts(View view) {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -47,8 +63,12 @@ public class ProductsFragment extends Fragment {
 
         List<Product> gaggeredList = getProducts();
 
-        ProductsRecyclerViewAdapter rcAdapter = new ProductsRecyclerViewAdapter(gaggeredList);
-        rcAdapter.
+        ProductsRecyclerViewAdapter rcAdapter = new ProductsRecyclerViewAdapter(gaggeredList, new ProductsRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Product item) {
+                mCallback.onCall(item);
+            }
+        });
         recyclerView.setAdapter(rcAdapter);
     }
 
@@ -56,14 +76,12 @@ public class ProductsFragment extends Fragment {
 
         List<Product> listViewItems = new ArrayList<Product>();
 
-        listViewItems.add(new Product("R$ 445", "Smartphone Alcatel Pixi4 5 8gb Tela 5' 8mp Com Tv Digital+nf", R.drawable.relogio));
-        listViewItems.add(new Product("12x R$ 445", "Celular Alcatel Pop3 ", R.drawable.relogio));
-        listViewItems.add(new Product("R$ 445","Lorem ipsum lorem ipsum", R.drawable.relogio));
-        listViewItems.add(new Product("10x R$ 445", "Celular Alcatel Pop3 ", R.drawable.relogio));
-        listViewItems.add(new Product("R$ 445", "", R.drawable.one));
-        listViewItems.add(new Product("Alkane", "", R.drawable.one));
-        listViewItems.add(new Product("Alkane", "", R.drawable.one));
-
+        listViewItems.add(new Product(34.99, "Tênis", "Smartphone Alcatel Pixi4 5 8gb Tela 5'", R.drawable.tenis2));
+        listViewItems.add(new Product(34.99, "Tênis", "Smartphone Alcatel Pixi4 5 8gb Tela 5' 8mp Com Tv Digital+nf", R.drawable.relogio));
+        listViewItems.add(new Product(34.99, "Tênis", "Smartphone Alcatel Pixi4 5 8gb Tela 5' 8mp Com Tv Digital+nf", R.drawable.relogio));
+        listViewItems.add(new Product(34.99, "Tênis", "Smartphone Alcatel Pixi4 5 8gb Tela 5' 8mp Com Tv Digital+nf", R.drawable.tenis2));
+        listViewItems.add(new Product(34.99, "Tênis", "Smartphone Alcatel Pixi4 5 8gb Tela 5' 8mp Com Tv Digital+nf", R.drawable.relogio));
+        listViewItems.add(new Product(34.99, "Tênis", "Smartphone Alcatel Pixi4 5 8gb Tela 5' 8mp Com Tv Digital+nf", R.drawable.tenis2));
         return listViewItems;
 
     }

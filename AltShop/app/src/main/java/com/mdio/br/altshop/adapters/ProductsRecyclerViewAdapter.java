@@ -13,26 +13,26 @@ import com.mdio.br.altshop.models.Product;
 
 import java.util.List;
 
-public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
+public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRecyclerViewAdapter.ViewHolder> {
 
     private List<Product> itemList;
+    private OnItemClickListener listener;
 
-    public ProductsRecyclerViewAdapter(List<Product> itemList) {
+    public ProductsRecyclerViewAdapter(List<Product> itemList, OnItemClickListener listener) {
         this.itemList = itemList;
+        this.listener = listener;
     }
 
     @Override
     public ProductsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item_lis, parent, false);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item_list, parent, false);
         ViewHolder vh = new ViewHolder(layoutView);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.productName.setText(itemList.get(position).getName());
-        holder.productDescription.setText(itemList.get(position).getDescription());
-        holder.productPhoto.setImageResource(itemList.get(position).getPhoto());
+        holder.bind(itemList.get(position), listener);
     }
 
     @Override
@@ -40,22 +40,32 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRe
         return itemList.size();
     }
 
-    @Override
-    public void onClick(View view) {
-
+    public interface OnItemClickListener {
+        void onItemClick(Product item);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView productName;
+        private TextView productPrice;
         private TextView productDescription;
         private ImageView productPhoto;
 
         public ViewHolder(View v) {
             super(v);
-            productName = (TextView) v.findViewById(R.id.product_name);
+            productPrice = (TextView) v.findViewById(R.id.productPrice);
             productDescription = (TextView) v.findViewById(R.id.product_description);
             productPhoto = (ImageView) v.findViewById(R.id.product_photo);
+        }
+
+        public void bind(final Product item, final OnItemClickListener listener) {
+            productPrice.setText("R$ " + Double.toString(item.getPrice()));
+            productDescription.setText(item.getDescription());
+            productPhoto.setImageResource(item.getPhoto());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
 
     }
