@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "334638718842",
+    "firebase_url": "https://bitmall-1cbab.firebaseio.com",
+    "project_id": "bitmall-1cbab",
+    "storage_bucket": "bitmall-1cbab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334638718842:android:2f34009ddabd3448",
+        "android_client_info": {
+          "package_name": "com.mdio.br.altshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "334638718842-9q1maqqugplm68qf3jqt8l1dp0n73cdq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mdio.br.altshop",
+            "certificate_hash": "eeaf707a7fa1f3d39c426e436fb58d4fdf431169"
+          }
+        },
+        {
+          "client_id": "334638718842-v8vi2ec835mtaicqpvj0lkvjt09setbq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "334638718842-v8vi2ec835mtaicqpvj0lkvjt09setbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPkqd0L-bgbItYWi5IcBBzSVQ4Dron4d8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "334638718842-v8vi2ec835mtaicqpvj0lkvjt09setbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

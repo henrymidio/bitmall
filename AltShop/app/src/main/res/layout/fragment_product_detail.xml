@@ -54,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:textColor="@color/md_white_1000"
         android:text="IR À LOJA" />
 
     <TextView

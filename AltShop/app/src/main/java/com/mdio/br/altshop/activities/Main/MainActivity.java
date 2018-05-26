@@ -1,5 +1,6 @@
 package com.mdio.br.altshop.activities.Main;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
@@ -16,10 +17,18 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mdio.br.altshop.R;
 import com.mdio.br.altshop.interfaces.OnFragmentCallListener;
 import com.mdio.br.altshop.models.Product;
 import com.mdio.br.altshop.providers.SuggestionProvider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements OnFragmentCallListener {
@@ -27,8 +36,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
     private Toolbar myToolbar;
     private FragmentManager fragmentManager = getFragmentManager();
     private boolean isTyping = false; //
-    private String[] suggestions = {"Celular", "PC", "Máquina de Lavar", "Shampoo"};
+    private Map<String, String> categoriasMap; // Variável que armazena o nome e id das categorias
     private ProductsFragment pf;
+    private FirebaseDatabase database;
+    private SearchView searchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +49,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        searchView = (SearchView) findViewById(R.id.search_product);
+        categoriasMap = new HashMap<>();
+        database = FirebaseDatabase.getInstance();
+
         pf = new ProductsFragment();
+
+        initSearchView();
 
         if(savedInstanceState == null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -45,15 +63,24 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
             fragmentTransaction.commit();
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void initSearchView() {
         /*
             Limpa o histórico de sugestões do searchview
          */
-        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(MainActivity.this,
+        final SearchRecentSuggestions suggestions = new SearchRecentSuggestions(MainActivity.this,
                 SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
         suggestions.clearHistory();
 
-        setSearchView();
-
+        // Seta os nomes das categorias de busca
+        DatabaseReference categoriasRef = database.getReference("categorias");
+        categoriasRef.addListenerForSingleValueEvent(categoriasRefListener);
     }
 
     private void setFragmentTransitions(Product product) {
@@ -92,43 +119,56 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
         }
     }
 
-    private void setSearchView() {
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) findViewById(R.id.search_product);
-        ComponentName cn = new ComponentName(this, Main2Activity.class);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                SearchRecentSuggestions suggestionsManager = new SearchRecentSuggestions(MainActivity.this,
-                        SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
-                if(s.length() > 0 && isTyping == false) {
-                    isTyping = true;
-                    addSuggestions(suggestions, suggestionsManager);
-                } else if(s.length() == 0) {
-                    isTyping = false;
-                    suggestionsManager.clearHistory();
-                }
-                return true;
-            }
-        });
-    }
-
-    private void addSuggestions(String[] suggestions, SearchRecentSuggestions suggestionsManager) {
-        for (int i = 0; i < suggestions.length; i++) {
-            suggestionsManager.saveRecentQuery(suggestions[i], null);
-        }
-    }
-
     @Override
     public void onCall(Product product) {
         setFragmentTransitions(product);
     }
+
+    /*
+        LISTENERS
+     */
+    ValueEventListener categoriasRefListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            for (DataSnapshot categoriaSnapshot: dataSnapshot.getChildren()) {
+                categoriasMap.put(categoriaSnapshot.getKey(), (String) categoriaSnapshot.child("nome").getValue());
+            }
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            ComponentName cn = new ComponentName(MainActivity.this, Main2Activity.class);
+
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
+            searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+            searchView.setOnQueryTextListener(searchViewOnQueryListener);
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    SearchView.OnQueryTextListener searchViewOnQueryListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            SearchRecentSuggestions suggestionsManager = new SearchRecentSuggestions(MainActivity.this,
+                    SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+            if(s.length() > 0 && isTyping == false) {
+                isTyping = true;
+                for (Map.Entry<String, String> entry : categoriasMap.entrySet()) {
+                    suggestionsManager.saveRecentQuery(entry.getValue(), null);
+                }
+            } else if(s.length() == 0) {
+                isTyping = false;
+                suggestionsManager.clearHistory();
+            }
+            return true;
+        }
+    };
 
 }
