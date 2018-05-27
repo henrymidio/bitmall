@@ -2,6 +2,7 @@ package com.mdio.br.altshop.adapters;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.mdio.br.altshop.R;
 import com.mdio.br.altshop.models.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -47,20 +49,20 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRe
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView productPrice;
-        private TextView productDescription;
+        private TextView productName;
         private ImageView productPhoto;
 
         public ViewHolder(View v) {
             super(v);
             productPrice = (TextView) v.findViewById(R.id.productPrice);
-            productDescription = (TextView) v.findViewById(R.id.product_description);
+            productName = (TextView) v.findViewById(R.id.productName);
             productPhoto = (ImageView) v.findViewById(R.id.product_photo);
         }
 
         public void bind(final Product item, final OnItemClickListener listener) {
-            productPrice.setText("R$ " + Double.toString(item.getPrice()));
-            productDescription.setText(item.getDescription());
-            productPhoto.setImageResource(item.getPhoto());
+            productPrice.setText("R$ " + Double.toString(item.getPreco()));
+            productName.setText(item.getNome());
+            Picasso.get().load(item.getImagem()).into(productPhoto);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);

@@ -27,6 +27,7 @@ import com.mdio.br.altshop.interfaces.OnFragmentCallListener;
 import com.mdio.br.altshop.models.Product;
 import com.mdio.br.altshop.providers.SuggestionProvider;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
             ft.commit();
         } else {
             FragmentTransaction ft = getFragmentManager().beginTransaction()
-                    .replace(R.id.container_fragment, new ProductDetailFragment())
+                    .replace(R.id.container_fragment, ProductDetailFragment.newInstance(product))
                     .addToBackStack("transaction");
             // Apply the transaction
             ft.commit();

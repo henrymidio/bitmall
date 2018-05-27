@@ -10,61 +10,73 @@
     <ImageView
         android:id="@+id/productImage"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="260dp"
         android:scaleType="fitCenter"
         android:src="@drawable/tenis2" />
 
-    <TextView
-        android:id="@+id/productName"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:textColor="#666"
-        android:text="TÊNIS RESERVA RSV #166 LIBERTY" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="40dp"
-        android:textColor="@color/colorAccent"
-        android:text="R$ 499,00" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="15dp"
-        android:textColor="#666"
-        android:text='Tênis exclusivo da Linha Reserva pra Calçar, agora por menos! Mete o pé no seu! 100% COURO' />
+            <TextView
+                android:id="@+id/textViewNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:text="TÊNIS RESERVA RSV #166 LIBERTY"
+                android:textColor="#666"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="@color/md_white_1000"
-        android:text="IR À LOJA" />
+            <TextView
+                android:id="@+id/textViewPreco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:text="R$ 249.0"
+                android:textColor="@color/colorAccent"
+                android:textSize="40dp" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:textAlignment="center"
-        android:textColor="#007bff"
-        android:textStyle="bold"
-        android:text="Reserva" />
+            <TextView
+                android:id="@+id/textViewDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:textColor="#666" />
+
+            <Button
+                android:id="@+id/btnLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="IR À LOJA"
+                android:textColor="@color/md_white_1000" />
+
+            <TextView
+                android:id="@+id/textViewLoja"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Reserva"
+                android:textAlignment="center"
+                android:textColor="#007bff"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>

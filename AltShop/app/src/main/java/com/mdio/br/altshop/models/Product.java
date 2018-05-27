@@ -1,34 +1,45 @@
 package com.mdio.br.altshop.models;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class Product implements Serializable {
 
-    private String name;
-    private String description;
-    private double price;
-    private int photo;
+    private String nome;
+    private String descricao;
+    private double preco;
+    private String imagem;
+    private Map<String, Object> loja;
 
-    public Product(double price, String name, String description, int photo) {
-        this.price = price;
-        this.name = name;
-        this.description = description;
-        this.photo = photo;
+    public Product() {
+
     }
 
-    public String getName() {
-        return name;
+    public Product(double price, String name, String description, String photo, Map<String, Object> loja) {
+        this.preco = price;
+        this.nome = name;
+        this.descricao = description;
+        this.imagem = photo;
+        this.loja = loja;
     }
 
-    public String getDescription() {
-        return description;
+    public String getNome() {
+        return nome;
     }
 
-    public int getPhoto() {
-        return photo;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public double getPrice() {
-        return price;
+    public String getImagem() {
+        return imagem;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public Map<String, Object> getLoja() {
+        return loja;
     }
 }
