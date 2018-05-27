@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +36,7 @@ public class ProductsFragment extends Fragment {
     private FirebaseDatabase database;
     private View view;
     OnFragmentCallListener mCallback;
+    private ProductsRecyclerViewAdapter rcAdapter;
 
     public ProductsFragment() {
         // Required empty public constructor
@@ -48,7 +50,7 @@ public class ProductsFragment extends Fragment {
             database = FirebaseDatabase.getInstance();
 
             setRecyclerView();
-            getProducts();
+            loadProducts(null);
         }
 
         // Inflate the layout for this fragment
@@ -93,7 +95,7 @@ public class ProductsFragment extends Fragment {
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
     }
 
-    private void getProducts() {
+    public void loadProducts(final String categoryFilter) {
 
         DatabaseReference produtos = database.getReference("produtos");
         produtos.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -102,10 +104,15 @@ public class ProductsFragment extends Fragment {
                 List<Product> productsList = new ArrayList<Product>();
                 for (DataSnapshot produtosSnapshot: dataSnapshot.getChildren()) {
                     Product produto = produtosSnapshot.getValue(Product.class);
-                    productsList.add(produto);
+                    if(categoryFilter != null) {
+                        if(produto.getCategoria().equals(categoryFilter)) {
+                            productsList.add(produto);
+                        }
+                    } else {
+                        productsList.add(produto);
+                    }
                 }
 
-                Collections.shuffle(productsList);
                 renderProducts(productsList);
             }
 
@@ -118,7 +125,11 @@ public class ProductsFragment extends Fragment {
     }
 
     private void renderProducts(List<Product> productsList) {
-        ProductsRecyclerViewAdapter rcAdapter = new ProductsRecyclerViewAdapter(productsList, new ProductsRecyclerViewAdapter.OnItemClickListener() {
+        if(rcAdapter != null) {
+            rcAdapter.filter(productsList);
+            return;
+        }
+        rcAdapter = new ProductsRecyclerViewAdapter(productsList, new ProductsRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Product item) {
                 mCallback.onCall(item);

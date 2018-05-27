@@ -13,6 +13,7 @@ import com.mdio.br.altshop.R;
 import com.mdio.br.altshop.models.Product;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRecyclerViewAdapter.ViewHolder> {
@@ -44,6 +45,11 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRe
 
     public interface OnItemClickListener {
         void onItemClick(Product item);
+    }
+
+    public void filter(List<Product> newItemList){
+        itemList = newItemList;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

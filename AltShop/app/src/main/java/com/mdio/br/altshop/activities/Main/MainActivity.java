@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Build;
 import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -139,7 +141,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
 
             searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
             searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
             searchView.setOnQueryTextListener(searchViewOnQueryListener);
+            searchView.setOnSuggestionListener(suggestionListener);
 
         }
 
@@ -150,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
     };
 
     SearchView.OnQueryTextListener searchViewOnQueryListener = new SearchView.OnQueryTextListener() {
+        SearchRecentSuggestions suggestionsManager;
         @Override
         public boolean onQueryTextSubmit(String s) {
             return false;
@@ -157,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
 
         @Override
         public boolean onQueryTextChange(String s) {
-            SearchRecentSuggestions suggestionsManager = new SearchRecentSuggestions(MainActivity.this,
+            suggestionsManager = new SearchRecentSuggestions(MainActivity.this,
                     SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
             if(s.length() > 0 && isTyping == false) {
                 isTyping = true;
@@ -167,8 +172,37 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
             } else if(s.length() == 0) {
                 isTyping = false;
                 suggestionsManager.clearHistory();
+                pf.loadProducts(null);
             }
-            return true;
+            return false;
+        }
+
+    };
+
+    SearchView.OnSuggestionListener suggestionListener = new SearchView.OnSuggestionListener() {
+        @Override
+        public boolean onSuggestionSelect(int position) {
+            return false;
+        }
+
+        @Override
+        public boolean onSuggestionClick(int position) {
+            Cursor cursor= searchView.getSuggestionsAdapter().getCursor();
+            cursor.moveToPosition(position);
+            String suggestion = cursor.getString(2);//2 is the index of col containing suggestion name.
+
+            String catId = "";
+            for (Map.Entry<String, String> entry : categoriasMap.entrySet()) {
+                if(entry.getValue().equals(suggestion)) {
+                    catId = entry.getKey();
+                }
+            }
+
+            pf.loadProducts(catId);
+
+            searchView.setQuery(suggestion,false);//setting suggestion
+
+            return false;
         }
     };
 

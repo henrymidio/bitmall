@@ -9,17 +9,19 @@ public class Product implements Serializable {
     private String descricao;
     private double preco;
     private String imagem;
+    private Long categoria;
     private Map<String, Object> loja;
 
     public Product() {
 
     }
 
-    public Product(double price, String name, String description, String photo, Map<String, Object> loja) {
+    public Product(double price, String name, String description, String photo, Long categoria, Map<String, Object> loja) {
         this.preco = price;
         this.nome = name;
         this.descricao = description;
         this.imagem = photo;
+        this.categoria = categoria;
         this.loja = loja;
     }
 
@@ -41,5 +43,9 @@ public class Product implements Serializable {
 
     public Map<String, Object> getLoja() {
         return loja;
+    }
+
+    public String getCategoria() {
+        return Long.toString(categoria);
     }
 }
