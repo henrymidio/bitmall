@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +39,7 @@ public class ProductsFragment extends Fragment {
     private View view;
     OnFragmentCallListener mCallback;
     private ProductsRecyclerViewAdapter rcAdapter;
+    private ProgressBar mProgressBar;
 
     public ProductsFragment() {
         // Required empty public constructor
@@ -45,8 +48,10 @@ public class ProductsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         if(view == null) {
             view = inflater.inflate(R.layout.fragment_products, container, false);
+            mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
             database = FirebaseDatabase.getInstance();
 
             setRecyclerView();
@@ -96,6 +101,7 @@ public class ProductsFragment extends Fragment {
     }
 
     public void loadProducts(final String categoryFilter) {
+        mProgressBar.setVisibility(View.VISIBLE);
 
         DatabaseReference produtos = database.getReference("produtos");
         produtos.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -112,7 +118,7 @@ public class ProductsFragment extends Fragment {
                         productsList.add(produto);
                     }
                 }
-
+                //Collections.shuffle(productsList);
                 renderProducts(productsList);
             }
 
@@ -127,6 +133,7 @@ public class ProductsFragment extends Fragment {
     private void renderProducts(List<Product> productsList) {
         if(rcAdapter != null) {
             rcAdapter.filter(productsList);
+            mProgressBar.setVisibility(View.GONE);
             return;
         }
         rcAdapter = new ProductsRecyclerViewAdapter(productsList, new ProductsRecyclerViewAdapter.OnItemClickListener() {
@@ -135,7 +142,47 @@ public class ProductsFragment extends Fragment {
                 mCallback.onCall(item);
             }
         });
+        int spanCount = 2; // 3 columns
+        int spacing = 12; // 50px
+        boolean includeEdge = true;
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setAdapter(rcAdapter);
+
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = 0; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
     }
 
 }

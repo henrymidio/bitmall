@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentCallLis
             pf.loadProducts(catId);
 
             searchView.setQuery(suggestion,false);//setting suggestion
+            searchView.clearFocus();
 
             return false;
         }
